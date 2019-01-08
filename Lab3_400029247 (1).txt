@@ -1,0 +1,107 @@
+//Pablo_400029247_30/10/2018_L3_02_Q1
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+typedef struct{
+        int itemID;
+        char itemName[25];
+        float price;
+        int number;
+    }item;
+
+item **create_items_list(int *noP)
+{
+    int n;
+    printf("Please input the number of items in inventory.\n");
+    scanf("%d", noP);
+
+    item **p = malloc((*noP)*sizeof(item*)); //allocates memorry for the rows  of items
+
+    for(int i=0; i<*noP; i++)
+    {
+        p[i] = malloc(sizeof(item)); //allocates memorry for the information of each item
+
+        printf("Please input the ID number, the item name, price of the item, quantity of the individual item.\n");
+        scanf("%d %s %f %d",&(p[i] -> itemID), p[i] -> itemName, &(p[i] -> price), &(p[i] -> number)); //sets values for each pointer with designated data types
+    }
+    return p;
+}
+
+void print_list(item **list, int number);
+void remove_item(int idNo, item **list, int *noP);
+void dealocate_list(item **list, int *noP);
+
+int main()
+{
+
+    int n;
+    int idNo, opOne, opTwo;
+    item **itemList = create_items_list(&n);
+    print_list(itemList,n);
+
+    printf("Do you wish to remove an item? (yes, 1.No, 0)\n");
+    scanf("%d", &opOne);
+
+    if (opOne == 1)
+    {
+        printf("Please input the ID number of the item you wish to remove\n");
+        scanf("%d", &idNo);
+        remove_item(idNo, itemList, &n);
+    }
+    else
+        printf("ok");
+
+    printf("Do you wish to remove all items? (yes, 1.No, 0)\n");
+    scanf("%d", &opTwo);
+
+    if (opTwo == 1)
+    {
+        dealocate_list(itemList, &n);
+    }
+    else
+        printf("ok");
+
+    return 0;
+}
+
+void print_list(item **list, int number)
+{
+    for(int i=0; i<number; i++)
+       {
+           if ((list[i]->itemID)< (list[i+1]->itemID))
+           {
+               printf("ID: %d; ", list[i]->itemID);
+               printf("Item Name: %s", list[i]->itemName);
+               printf("; Price: %f;", list[i]->price);
+               printf("Number of articles in this category: %d\n", list[i]->number);
+           }
+           else
+           {
+               printf("ID: %d; ", list[i]->itemID);
+               printf("Item Name: %s; ", list[i]->itemName);
+               printf("Price: %f;", list[i]->price);
+               printf("Number of articles in this category: %d\n", list[i]->number);
+           }
+       }
+}
+
+void remove_item(int idNo, item **list, int *noP)
+{
+    for(int i=0; i<*noP; i++)
+    {
+        if (idNo == (list[i]->itemID))
+        {
+            free(list[i]);
+        }
+        else
+            continue;
+    }
+}
+
+void dealocate_list(item **list, int *noP)
+{
+    free(list);
+    *noP = 0;
+}

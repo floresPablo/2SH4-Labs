@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    int i, j;
+    int n, run = 1;
+    int space, countdown;
+
+    while(run!=0)
+    {
+        printf("enter number of odd lines: \n");
+        scanf("%d", &n);
+
+        if(n%2!=0 && n>=5 && n<=30)
+            break;
+    }
+
+
+    countdown = n;
+
+    for( i = 1; i <= n; i++ )
+    {
+        if(i<=((n/2)))
+        {
+            for (space=1; space<= countdown-1;space++)
+            {
+                printf(" ");
+            }
+            countdown-=2;
+        }
+
+        else if(i>((n/2)+1))
+        {
+            for (space=1; space<= countdown+1;space++)
+            {
+                printf(" ");
+            }
+            countdown+=2;
+        }
+
+      for( j = 1; j <= 2*n; j++ )
+        {
+            printf("*");
+        }
+    printf("\n");
+    }
+
+
+    return 0;
+}

@@ -1,0 +1,24 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    int sum = 0;
+    printf("this program computes the sum of the perfect squares between 50 and 2000 \n");
+
+    for (int i=50; i<=2000; i++)
+    {
+        for(int j = 7; j <= 50; j++)
+        {
+            if(j*j == i)
+            {
+                sum = i + sum;
+            }
+            else
+                continue;
+        }
+    }
+    printf("the sum of the perfect squares is, %d", sum);
+
+    return 0;
+}

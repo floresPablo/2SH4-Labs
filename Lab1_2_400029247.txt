@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    int run = 1, n, num = 0, smallest = 0, hold=0;
+
+    while(run!=0)
+    {
+        printf("enter numbers of integers: \n");
+        scanf("%d", &n);
+
+        if(n>1)
+            break;
+    }
+
+    for(int i = 1; i<=n; i++)
+    {
+        printf("enter number %d: \n", i);
+        scanf("%d", &num);
+
+
+        if(hold <=num)
+        {
+            smallest = hold;
+            hold = num;
+        }
+        else
+            hold = num;
+    }
+
+    printf("second smallest,%d. Smallest %d", hold, smallest);
+
+    return 0;
+}

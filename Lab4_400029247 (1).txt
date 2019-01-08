@@ -1,0 +1,319 @@
+//PabloFlores_400029247_13/11/2018_Lab4_V01//
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+Test Cases
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package testcase;
+
+/**
+ *
+ * @author florep1
+ */
+public class TestCase {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+           
+     //Test MyDate
+     System.out.print("MM/DD/YY\n");    
+     MyDate case1 = new MyDate(); //standard
+     System.out.print("case1: " + case1.toString());
+        
+     MyDate case2 = new MyDate(-1995,5,50); // invalid
+     System.out.print("-->case2 is a wrong year so it will set date to 1990/1/1\n");
+     System.out.print("case2: " + case2.toString());
+     
+     MyDate case3 = new MyDate(2018,6,26); // valid
+     System.out.print("case3: " + case3.toString());   
+     
+     MyDate case4 = new MyDate(2000,2,28); // valid leap year
+     System.out.print("case4: " + case4.toString()); 
+     
+     MyDate case5 = new MyDate(2000,2,30); // invalid leap year
+     System.out.print("-->case 5 has 30 days, but year is a leap year and febuary only has 28 days, so it will set date to 1990/1/1\n");
+     System.out.print("case5: " + case5.toString());
+     System.out.print("--> It changes once the proper date is put on through set\n");
+     case5.set(2000,2,25);
+     System.out.print("case5: " + case5.toString());
+     System.out.print("--> The following prints the copy of the object case5\n");
+     System.out.print("case5: " + case5.copy()+"\n");
+     
+     
+//Test Employee
+     
+     System.out.print("-->this will print out the standard date of january, 1,1999, as the date doesnt exist\n");
+     Employee juniorBad = new Employee(2000, 2, 30, "Jake", "Bourne"); //invalid due to date
+     System.out.print("Hireday: " + juniorBad.getHireday());
+     System.out.print("First Name: " + juniorBad.getFirstName()+"\n");
+     System.out.print("Last Name: " + juniorBad.getLastName()+"\n\n");
+      
+     System.out.print("-->the following will print out the correct data as the date does exist\n");
+     Employee junior = new Employee(2000, 2, 28, "Jason", "Bourne"); //valid
+     System.out.print("Hireday: " + junior.getHireday());
+     System.out.print("First Name: " + junior.getFirstName()+"\n");
+     System.out.print("Last Name: " + junior.getLastName()+"\n\n");
+     
+     Employee juniorGood = new Employee(2000, 2, 21, "Grace", "Evans"); //valid 
+     System.out.print("Hireday: " + juniorGood.getHireday());
+     System.out.print("First Name: " + juniorGood.getFirstName()+"\n");
+     System.out.print("Last Name: " + juniorGood.getLastName()+"\n\n");
+     
+     Employee senior = new Employee(1999, 4, 29, "Ligm", "Baws");//valid 
+     System.out.print("Hireday: " + senior.getHireday());
+     System.out.print("First Name: " + senior.getFirstName()+"\n");
+     System.out.print("Last Name: " + senior.getLastName()+"\n\n");
+     
+     
+     System.out.print("jason was hired before ligm: " + junior.hiredTheSameYear(senior)+"\n");
+     System.out.print("jason was older than ligm: " + junior.isOlderThan(senior)+"\n\n");
+     
+     int year = 2000;
+     Employee[] manyE = {junior,juniorGood,senior,juniorBad};
+     int [] post = new int [manyE.length];
+
+     post = Employee.hiredInMonth(manyE, year);
+     
+     System.out.print("-->the following will print out the positions of the workers with the same year of hire\n");
+     for(int i = 0; i<post.length; i++)
+     {
+          System.out.print(post[i]+"\n");
+     }      
+    }
+    
+}
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+MyDate Class
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package testcase;
+
+/**
+ *
+ * @author florep1
+ */
+public class MyDate {
+    //instance fields
+    private int year;
+    private int month;
+    private int day;
+    //constructor
+    public MyDate()
+    {
+        year = 1990;
+        month = 1;
+        day = 1;    
+    }
+    //constructor   
+    public MyDate(int theYear, int theMonth, int theDay)
+    { 
+        if(theYear>0 && (theMonth>0 && theMonth<=12) && theDay>0) //date must be positive
+        { 
+            if(theMonth%2==0 && theDay<=31 && (theYear%4)!=0) // different days for even months
+            {   
+                year = theYear;
+                month = theMonth;
+                day = theDay;
+            }
+            else if(theDay<=30 && (theYear%4)!=0) // different days for odd months
+            {   
+                year = theYear;
+                month = theMonth;
+                day = theDay;
+            }
+            else if (theMonth==2 && theDay<=28)//acount for leap years 
+            {
+                year = theYear;
+                month = theMonth;
+                day = theDay;
+            }
+            else
+            {   
+                year = 1990;
+                month = 1;
+                day = 1;
+            }
+        }
+        else
+        {
+            year = 1990;
+            month = 1;
+            day = 1;
+        }
+    }
+    //methods
+    public boolean set(int theYear, int theMonth, int theDay)
+    {
+        if(theYear>0 && (theMonth>0 && theMonth<=12) && theDay>0) //date must be positive
+        { 
+            if(theMonth%2==0 && theDay<=31 && theYear%4!=0) // different days for even months
+            {   
+                year = theYear;
+                month = theMonth;
+                day = theDay;
+                return true;
+            }
+            else if(theDay<=30 && theYear%4!=0) // different days for odd months
+            {   
+                year = theYear;
+                month = theMonth;
+                day = theDay;
+                return true;
+            }
+            else if (theMonth==2 && theDay<=28)//acount for leap years 
+            {
+                year = theYear;
+                month = theMonth;
+                day = theDay;
+                return true;
+            }
+            else
+                return false;
+        }
+        else
+            return false;
+        
+    }   
+    
+    public int getYear()
+    {
+        return year;
+    }
+    
+    public int getMonth()
+    {
+        return month;
+    }    
+    
+    public int getDay()
+    {
+        return day;
+    }
+    
+    public MyDate copy()// makes new object referencing current object
+    {
+        return new MyDate(year, month, day);
+    }   
+    
+    public String toString()// returns a string of the date
+    {
+        String date = new String(); // creates an empty string
+        date += month + "/" + day+ "/" + year+ "\n";
+        return date;
+    }   
+}
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+Employees Class
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package testcase;
+
+/**
+ *
+ * @author florep1
+ */
+public class Employee {
+
+    private MyDate dateOfHiring;
+    private String firstName;
+    private String lastName;
+    //constructor
+    public Employee(int y, int m, int d, String fName, String lName)
+    {
+        set(y, m, d, fName, lName);
+    }
+    //methods
+    public void set(int y, int m, int d, String fName, String lName)//
+    {
+        firstName = new String();
+        lastName = new String();
+        firstName = fName;
+        lastName = lName;
+        dateOfHiring = new MyDate(y, m, d);
+    }   
+    
+    public MyDate getHireday()
+    {
+        return dateOfHiring.copy();
+    }
+    
+    public String getFirstName()
+    {
+        return new String(firstName);
+    }    
+    
+    public String getLastName()
+    {
+        return new String(lastName);
+    }
+    
+    public boolean hiredTheSameYear(Employee e)
+    {
+        if(e.getHireday().getYear() == getHireday().getYear()) //decides if the employees were hired the same year
+        {
+            return true;
+        }
+            
+        else 
+        {
+            return true;    
+        }
+    }
+     
+    public boolean isOlderThan(Employee e)
+    {
+        if((getHireday().getYear() < e.getHireday().getYear()) || (getHireday()== e.getHireday())) //decides which employee is older by year, or if they were hired the same day 
+        {
+            return true;
+        }
+        else 
+        {
+            return false;    
+        }
+    }
+    
+    public static int[] hiredInMonth(Employee[] manyE, int theYear) //method that does not depend on the current object and finds out at which positions the employees were hired at the year inputed
+    {
+        int position[] = new int[manyE.length]; //allocates space for array of length manyE
+        
+        int j = 0;
+        
+        for (int i = 0; i< manyE.length; i++)
+        {
+            if (manyE[i].getHireday().getYear() == theYear)
+            {
+                position[j] = i;
+                j++;
+            }
+            else
+                continue;
+        }
+        return position;
+    }
+    
+    public String toString()// returns string with employer info
+    {
+        String data = new String(); // creates an empty string
+        data += "Employee: "+getFirstName()+" "+ getLastName()+"\nHireday: "+getHireday().getMonth()+"/" +getHireday().getDay()+ "/" +getHireday().getYear()+"\n";
+        return data;
+    }
+}
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------

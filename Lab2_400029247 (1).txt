@@ -1,0 +1,140 @@
+//Pablo Flores_ 400029247_16/10/2018_Lab2_1_Q1
+
+#include <stdio.h>
+#include <stdlib.h>
+
+void multiple_copy(const int x[], int y[], int n, int m);
+
+int main()
+{
+    int n = 3; //size of x array
+    int m = 3; //number of times printed array
+    int arrayX[] = {3,1,6};
+    int arrayY[m*n]; //copy of the arrayX
+
+    printf("the following program will print the numbers in the an array m = %d times:\n\n", m);
+    multiple_copy(arrayX, arrayY, n, m); //calls function and runs it
+
+    return 0;
+}
+void multiple_copy(const int x[], int y[], int n, int m)
+{
+    for(int i= 0; i<n; i++) //runs thorugh each number
+    {
+        for(int j = 0; j<m; j++) //prints that number m times
+        {
+            y[j] = x[i];
+            if (j == m-1 && i == n-1) //puts a period on the last digit
+                printf("%d.\n", y[j]);
+            else
+                printf("%d, ", y[j]);
+
+        }
+    }
+}
+
+//Pablo Flores_ 400029247_16/10/2018_Lab2_1_Q2
+
+#include <stdio.h>
+#include <stdlib.h>
+
+void my_strcat(const char str1[], const char str2[], char str3[], int n);
+
+int main()
+{
+    //declaring variables
+    int n = 12;
+    char str1[]= "Conca";
+    char str2[]= "tenates";
+    char str3[n];
+    //
+    puts("This program will combine the following strings: \n");
+    printf("%s <--> %s\n\n",str1,str2);
+
+    puts("Together:");
+    my_strcat(str1, str2, str3, n);
+
+    return 0;
+}
+
+void my_strcat(const char str1[], const char str2[], char str3[], int n)
+{
+    int i,count1 = 0,count2= 0,j = 0;
+    while (str1[count1]!= '\0'||str2[count2]!= '\0') //counts the number of characters for each word
+    {
+        if (str1[count1]!= '\0') //once str1 hits null, it stops counting
+            count1++;
+
+        else if(str2[count2]!= '\0') //once str2 hits null, it stops counting (need this as we dont know which one of str1 or str2 is going to be larger)
+            count2++;
+    }
+
+    if ((count1+count2)<=n) //shows error if the sum of the counts is more than thye size of str3
+    {
+        for(i= 0; i<count1; i++) //places the first part of the string into str3
+        {
+            str3[i] = str1[i];
+        }
+        for(i = count1; str2[j]!= '\0'; i++) //places the second part of the string into st3
+        {
+            str3[i] = str2[j];
+            j++;
+        }
+        str3[i] = '\0'; //make str3 a string
+        printf("%s\n", str3); //output
+    }
+    else
+        printf("size of the str3 is not large enough :("); //ERROR
+}
+
+
+//Pablo Flores_ 400029247_16/10/2018_Lab2_1_Q3
+
+#include <stdio.h>
+#include <stdlib.h>
+#define N 4 //sets value N the same throughout code
+
+void min(int a[][N], int b[], int n);
+
+int main()
+{
+    //stating varibles
+    int n = 5;
+    int a[5][N] = {{1,2,3,5},{2,5,8,8},{5,4,3,2},{8,1,5,2},{6,2,3,8}}; //[row][collumn] (test numbers)
+    int b[N];
+
+    min(a, b, n); //calls the function
+
+    printf("The minimum element in each column is: ");
+    for(int i = 0; i<N; i++)//prints out the array
+    {
+        printf("%d ",b[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
+
+void min(int a[][N], int b[], int n) // funtion that allocates the min numbers of each column and stores in array b
+{
+    int min;
+    for(int column = 0; column<N; column++)//picks the column to check
+    {
+        min = a[0][column]; //resets min value for each column
+
+        for(int row = 0; row<n; row++) //goes through each row in a columnt
+        {
+            if(min <= a[row][column]) //if the min is already less(or equal) than the next value, then store it in b, and continue to check
+            {
+                b[column] = min;
+                continue;
+            }
+            else //if the min is more than the next value, then store the next value into min an then b, and continue to check
+            {
+                min = a[row][column];
+                b[column] = min;
+            }
+        }
+    }
+}
+

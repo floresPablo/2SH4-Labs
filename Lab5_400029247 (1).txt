@@ -1,0 +1,225 @@
+//PabloFlores_400029247_27/11/2018_Lab5_V02//
+
+**This code IS fully functional I had to change the class name to the sheets so there may or may not be any mistakes :(**
+
+Test Cases
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package testcase2;
+
+/**
+ *
+ * @author florep1
+ */
+public class TestItemsList {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+        
+        String[] a ={"blue","yellow","blue","black"};
+        ItemsLinkedList list = new ItemsLinkedList(a);
+        list.printList();
+        
+        //test for method getSize()
+        System.out.println("getSize() = "+list.getSize());
+        System.out.println("***********************************************************************************************************************************");
+        
+        //test for method replace
+        System.out.println(list.replace(3,"white"));
+        list.printList();
+        System.out.println("***********************************************************************************************************************************");
+        
+        //test for method insert
+        list.insert("blue","red");
+        list.printList();
+        System.out.println("***********************************************************************************************************************************");       
+        
+        //test for method remove
+        System.out.println("The following will remove red from the list");
+        list.remove(1);
+        list.printList();
+        System.out.println("***********************************************************************************************************************************");        
+        
+        //test for method deepCopy
+        System.out.println("\nThe following will print copy as well as modifying copy & the real list, to see if copy will affect the real (which it shouldn't)");
+        ItemsLinkedList listTwo = list.deepCopy();
+        System.out.println("Printing Copy");
+        listTwo.printList();
+        System.out.println("Printing real");
+        list.printList();
+        System.out.println("Printing Copy modified");
+        listTwo.remove(1);
+        listTwo.printList();
+        System.out.println("Printing real modified");
+        list.remove(2);
+        list.printList();
+        System.out.println("***********************************************************************************************************************************");
+    }
+    
+}
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+MyNode Class
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package testcase2;
+
+/**
+ *
+ * @author florep1
+ */
+public class MyNode {
+    String word;
+    MyNode next;
+    
+    public MyNode(String w, MyNode n)
+    {
+        word = w;
+        next = n;
+    }
+}
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+ItemsLinkedList Class
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package testcase2;
+import  java.lang.String;
+//add coments insert
+/**
+ *
+ * @author florep1
+ */
+public class ItemsLinkedList {
+    private MyNode head;
+    private int size;
+    
+    public ItemsLinkedList()
+    {
+        size = 0;
+        head = new MyNode(null,null); //dummy node pointing to null
+    }
+    
+    public ItemsLinkedList(String[] arrayOfItems)
+    {
+        head = new MyNode(null,null);//dummy node pointing to null
+        size = arrayOfItems.length;
+        MyNode p = head;
+        String w;
+        
+        for(int i = 0; i<size; i++)
+        {
+            w = new String(arrayOfItems[i]);
+            p.next = new MyNode(w, null);
+            p = p.next;
+        }
+        
+    }
+    
+    public void printList()
+    {
+        MyNode p;
+        System.out.print("The list contains[");
+        for(p = head.next; p!=null; p=p.next)
+        {
+            System.out.print(p.word + " ");
+        }
+        System.out.print("]. Its size is "+ size + ".\n");    
+    }
+    
+    public int getSize()
+    {return size;}
+    
+    public boolean replace(int j, String w)
+    {
+        MyNode p= head.next;
+        if(j>=0 && j<size)
+        {
+            for(int i = 0; i<j; i++) //will never reach null pointer
+            {
+                p = p.next;
+            }
+            p.word = w; // replace current node word with desired word
+            return true;
+        }
+        return false;
+    }
+    
+    public void insert(String v, String w)//inserts the string w besides the chosen string v that appears continously in list. it doesnt do anything if the string v is not in the list
+    {
+        // I will use two nodes, one to represent each element of the list and the other is the node that will be added 
+        MyNode p = head.next;//node 1
+              
+        while(p != null)// loop runs through list
+        {
+            MyNode q = new MyNode(w,null);//node 2
+            if(p.word.equals(v)) //check if v is in list and we want to add word beside the instances v appears
+            {
+                q.next = p.next; //q next now links to what p is linked to
+                p.next = q; // p next now links to q instead of the old node
+                size += 1;//updating the size of the list
+            }
+            p = p.next; // keep changing p until to its next node
+        }     
+    }
+    
+    public void remove(int j)
+    {
+        MyNode p= head;
+        if(j>=0 && j<size)
+        {
+            for(int i = 0; i<j; i++) //will never reach null pointer
+            {
+                p = p.next;
+            }
+            p.next = p.next.next;
+            size -= 1; //updating the size of the list
+        }
+        else
+            System.out.print("ERROR! The number selected is not in list :(\n"); 
+    }
+    
+    public void add(String w) //adds in last before null
+    {
+        MyNode q = head; //q points to the head of the current instance of the list
+
+            while(q.next!=null) //since we start in dummy node the while loop would not start so we start at q.next, which is the next node of the current list. this loops until the next node is null
+            {
+                q = q.next; //since the last iteration is just before q.next node is null, we are changing q to be the node just before the null
+            }  
+            q.next = new MyNode(w,null);//as q is in the node before null, we insert a q.next with the desired word w that points to null, now nothing is pinting to the other null so the GC collectst the term      
+    }
+    
+    public ItemsLinkedList deepCopy()
+    {
+        MyNode p;
+        ItemsLinkedList theCopy = new ItemsLinkedList(); //creating a new set
+        for(p =head.next; p!=null; p = p.next)//loop runs through each element of the list
+        {
+            
+            theCopy.add(p.word); //we call add to the work of adding each element
+            theCopy.size += 1; // we have to update the size of the list
+        }
+        
+        return theCopy;                
+    }
+}
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
